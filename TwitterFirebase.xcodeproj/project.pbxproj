@@ -25,7 +25,7 @@
 		7253493220907EDE00F244A3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493120907EDE00F244A3 /* User.swift */; };
 		7253493420907FB400F244A3 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493320907FB400F244A3 /* Post.swift */; };
 		72534936209080D500F244A3 /* SetupProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72534935209080D500F244A3 /* SetupProfileController.swift */; };
-		728FACE62091B61D00FA23A6 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE52091B61D00FA23A6 /* CustomImageView.swift */; };
+		728FACE62091B61D00FA23A6 /* CustomButtonClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE52091B61D00FA23A6 /* CustomButtonClasses.swift */; };
 		728FACE82091C2DF00FA23A6 /* FirebaseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */; };
 		728FACED2091D51B00FA23A6 /* PostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACEC2091D51B00FA23A6 /* PostController.swift */; };
 		728FACEF2091D65E00FA23A6 /* PostTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACEE2091D65E00FA23A6 /* PostTextView.swift */; };
@@ -59,7 +59,7 @@
 		7253493120907EDE00F244A3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7253493320907FB400F244A3 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		72534935209080D500F244A3 /* SetupProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileController.swift; sourceTree = "<group>"; };
-		728FACE52091B61D00FA23A6 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		728FACE52091B61D00FA23A6 /* CustomButtonClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonClasses.swift; sourceTree = "<group>"; };
 		728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseExtension.swift; sourceTree = "<group>"; };
 		728FACEC2091D51B00FA23A6 /* PostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostController.swift; sourceTree = "<group>"; };
 		728FACEE2091D65E00FA23A6 /* PostTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTextView.swift; sourceTree = "<group>"; };
@@ -131,7 +131,7 @@
 				72534913209075F400F244A3 /* UI extensions.swift */,
 				725349192090761500F244A3 /* CustomAnimationDismisser.swift */,
 				7253491B2090761A00F244A3 /* CustomAnimationPresentor.swift */,
-				728FACE52091B61D00FA23A6 /* CustomImageView.swift */,
+				728FACE52091B61D00FA23A6 /* CustomButtonClasses.swift */,
 				728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */,
 			);
 			path = Utils;
@@ -343,7 +343,7 @@
 				728FACE82091C2DF00FA23A6 /* FirebaseExtension.swift in Sources */,
 				72534936209080D500F244A3 /* SetupProfileController.swift in Sources */,
 				7253493220907EDE00F244A3 /* User.swift in Sources */,
-				728FACE62091B61D00FA23A6 /* CustomImageView.swift in Sources */,
+				728FACE62091B61D00FA23A6 /* CustomButtonClasses.swift in Sources */,
 				725349202090763500F244A3 /* MenuHeader.swift in Sources */,
 				725349162090760800F244A3 /* HomeController.swift in Sources */,
 				725349182090760C00F244A3 /* HomePostCell.swift in Sources */,

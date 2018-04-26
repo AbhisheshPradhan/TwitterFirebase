@@ -12,6 +12,7 @@ import Firebase
 class SetupProfileController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -144,6 +145,7 @@ class SetupProfileController: UIViewController, UIImagePickerControllerDelegate,
                     
                     guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
                     mainTabBarController.setupViewControllers()
+                    UserDefaults.standard.set(profileImageUrl, forKey: "Key")
                     self.dismiss(animated: true, completion: nil)
                 })
         })

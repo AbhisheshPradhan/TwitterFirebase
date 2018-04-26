@@ -11,7 +11,7 @@ import Firebase
 
 class MenuOption: NSObject {
     
-    let name: String
+    var name: String
     let image: UIImage
     
     
@@ -120,7 +120,10 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let option = menuOptions[indexPath.item]
-        print(option.name)
+        
+        if option.name == "Profile"{
+            didTapUserProfileImage()
+        }
         
         handleDismiss()
     }

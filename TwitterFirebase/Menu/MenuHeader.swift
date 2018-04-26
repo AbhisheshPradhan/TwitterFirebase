@@ -26,6 +26,10 @@ class MenuHeader: UICollectionViewCell
             let attributedText = NSMutableAttributedString(string: fullname + "\n", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
             attributedText.append(NSAttributedString(string: "@" + username, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
             usernameLabel.attributedText = attributedText
+            
+            guard let imageUrl = user?.profileImageUrl else { return }
+
+            userProfileImage.loadImage(urlString: imageUrl)
         }
     }
     
@@ -54,10 +58,13 @@ class MenuHeader: UICollectionViewCell
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var userProfileImage: UIButton = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "happy"), for: .normal)
+    lazy var userProfileImage: CustomImageButton = {
+        let button = CustomImageButton()
         button.addTarget(self, action: #selector(handleOpenUserProfile), for: .touchUpInside)
+        button.layer.cornerRadius = button.frame.width / 2
+        button.layer.masksToBounds = true
+        button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        button.layer.borderWidth = 0.5
         return button
     }()
     
@@ -71,7 +78,7 @@ class MenuHeader: UICollectionViewCell
         return label
     }()
     
-    let followingLabel:UILabel = {
+    let followingLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         let attributedText = NSMutableAttributedString(string: "115", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
@@ -80,7 +87,7 @@ class MenuHeader: UICollectionViewCell
         return label
     }()
     
-    let followersLabel:UILabel = {
+    let followersLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         let attributedText = NSMutableAttributedString(string: "11", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])

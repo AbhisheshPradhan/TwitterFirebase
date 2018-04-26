@@ -16,6 +16,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         print("Going to User's Profile from home controller")
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(userProfileController, animated: true)
+     //   navigationController?.hidesBarsOnSwipe = false
     }
     
     let cellId = "cellId"
@@ -24,11 +25,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: PostController.updateFeedNotificationName, object: nil)
         
-        collectionView?.backgroundColor = .lightGray
+        collectionView?.backgroundColor = .bgGray()
         self.navigationItem.title = "Home"
+        
+
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         
         self.navigationController?.navigationBar.titleTextAttributes = [kCTFontAttributeName: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
@@ -53,15 +55,33 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     func setupNavBarButtons(){
         self.navigationItem.leftBarButtonItem = userProfileImageButton
+        
         self.navigationItem.rightBarButtonItem = tweetButton
     }
     
+    var user: User?
+    let uid = Auth.auth().currentUser?.uid ?? ""
+    
+    
     lazy var userProfileImageButton: UIBarButtonItem = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "happy"), for: .normal)
+        let button = CustomImageButton()
+        
+        Database.fetchUserWithUID(uid: uid, completion: { (user) in
+            let imageUrl = user.profileImageUrl
+            button.loadImage(urlString: imageUrl)
+            button.clipsToBounds = true
+            // button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            button.layer.cornerRadius = 15
+            button.layer.masksToBounds = true
+            button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            button.layer.borderWidth = 0.5
+            button.addTarget(self, action: #selector(self.handleShowMenu), for: .touchUpInside)
+        })
+        
         let barButton = UIBarButtonItem()
         barButton.customView = button
-        button.addTarget(self, action: #selector(handleShowMenu), for: .touchUpInside)
+        barButton.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        barButton.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
         return barButton
     }()
     
@@ -90,16 +110,24 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         print("Showing User Profile")
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(userProfileController, animated: true)
+        // navigationController?.navigationBar.transparentNavigationBar()
     }
     
     @objc func handleShowCreateTweet(){
         print("Showing Tweet page")
         let postController = PostController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(postController, animated: true)
+        //  navigationController?.navigationBar.transparentNavigationBar()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 300)
+        
+        let post = posts[indexPath.item]
+        let size = CGSize(width: view.frame.width - 82, height: 1000)
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]
+        let estimatedFrame = NSString(string: post.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        
+        return CGSize(width: view.frame.width, height: estimatedFrame.height + 80)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -107,7 +135,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0
+        return 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -122,7 +150,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     fileprivate func fetchPosts(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.fetchUserWithUID(uid: uid) {(user) in
-            // self.fetchPostsWithUser(user: user)
             Database.database().reference().child("posts").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 self.collectionView?.refreshControl?.endRefreshing()

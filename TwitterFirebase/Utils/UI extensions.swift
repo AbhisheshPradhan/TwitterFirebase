@@ -22,6 +22,14 @@ extension UIColor{
     static func mainBlue() -> UIColor{
         return UIColor.rgb(red: 50, green: 171, blue: 223)
     }
+    
+    static func lightBlue() -> UIColor {
+        return UIColor.rgb(red: 98, green: 239, blue: 247)
+    }
+    
+    static func bgGray() -> UIColor{
+        return UIColor.rgb(red: 211, green: 211, blue: 211)
+    }
 }
 
 extension UIViewController {
@@ -34,7 +42,32 @@ extension UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
 }
+
+extension UIView {
+    
+    func setGradientBackground(colorOne: UIColor, colorTwo: UIColor) {
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = bounds
+        gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
+        
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+}
+
+//extension UINavigationBar {
+//
+//    func transparentNavigationBar() {
+//        self.setBackgroundImage(UIImage(), for: .default)
+//        self.shadowImage = UIImage()
+//        self.isTranslucent = true
+//    }
+//}
 
 extension UIView {
     func anchor(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil,
@@ -74,7 +107,7 @@ extension UIView {
 //Adding Properties: shake
 
 extension UIButton {
- 
+    
     func shake() {
         
         let shake = CABasicAnimation(keyPath: "position")

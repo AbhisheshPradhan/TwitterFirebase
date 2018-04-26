@@ -22,6 +22,7 @@ class MainTabBarController: UITabBarController {
         }
         view.backgroundColor = .white
         setupViewControllers()
+        
     }
     
     func setupViewControllers(){

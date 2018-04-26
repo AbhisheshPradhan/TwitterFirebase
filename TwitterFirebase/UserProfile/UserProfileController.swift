@@ -19,10 +19,12 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = .lightGray
+        collectionView?.backgroundColor = .white
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         self.navigationItem.rightBarButtonItem = tweetButton
+       // navigationController?.hidesBarsOnSwipe = true
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: PostController.updateFeedNotificationName, object: nil)
         
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 250, left: 0, bottom: 0, right: 0)
         
@@ -30,6 +32,18 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         fetchUser()
         fetchPosts()
     }
+   
+    @objc func handleUpdateFeed(){
+        handleRefresh()
+    }
+    
+    @objc func handleRefresh() {
+        print("Handling refresh..")
+        posts.removeAll()
+        collectionView?.reloadData()
+        fetchPosts()
+    }
+    
     
     lazy var tweetButton: UIBarButtonItem = {
         let button = UIButton()
@@ -42,10 +56,19 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     
     @objc func handleShowCreateTweet(){
         print("Create new tweet")
+        let postController = PostController(collectionViewLayout: UICollectionViewFlowLayout())
+        navigationController?.pushViewController(postController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 300)
+        
+        let post = posts[indexPath.item]
+        let size = CGSize(width: view.frame.width - 82, height: 1000)
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]
+        
+        let estimatedFrame = NSString(string: post.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
+        
+        return CGSize(width: view.frame.width, height: estimatedFrame.height + 80)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
