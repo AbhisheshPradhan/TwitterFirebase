@@ -7,21 +7,71 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7253490D2090745200F244A3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253490C2090745200F244A3 /* MainTabBarController.swift */; };
+		72534910209075DC00F244A3 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253490F209075DC00F244A3 /* LoginController.swift */; };
+		72534912209075EC00F244A3 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72534911209075EC00F244A3 /* SignUpController.swift */; };
+		72534914209075F400F244A3 /* UI extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72534913209075F400F244A3 /* UI extensions.swift */; };
+		725349162090760800F244A3 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349152090760800F244A3 /* HomeController.swift */; };
+		725349182090760C00F244A3 /* HomePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349172090760C00F244A3 /* HomePostCell.swift */; };
+		7253491A2090761600F244A3 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349192090761500F244A3 /* CustomAnimationDismisser.swift */; };
+		7253491C2090761A00F244A3 /* CustomAnimationPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253491B2090761A00F244A3 /* CustomAnimationPresentor.swift */; };
+		725349202090763500F244A3 /* MenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253491D2090763500F244A3 /* MenuHeader.swift */; };
+		725349212090763500F244A3 /* MenuLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253491E2090763500F244A3 /* MenuLauncher.swift */; };
+		725349222090763500F244A3 /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253491F2090763500F244A3 /* MenuCell.swift */; };
+		725349272090763E00F244A3 /* UserProfileMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349232090763E00F244A3 /* UserProfileMenuBar.swift */; };
+		725349282090763E00F244A3 /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349242090763E00F244A3 /* UserProfileController.swift */; };
+		725349292090763E00F244A3 /* UserProfileMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349252090763E00F244A3 /* UserProfileMenuCell.swift */; };
+		7253492A2090763E00F244A3 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 725349262090763E00F244A3 /* UserProfileHeader.swift */; };
+		7253493220907EDE00F244A3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493120907EDE00F244A3 /* User.swift */; };
+		7253493420907FB400F244A3 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493320907FB400F244A3 /* Post.swift */; };
+		72534936209080D500F244A3 /* SetupProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72534935209080D500F244A3 /* SetupProfileController.swift */; };
+		728FACE62091B61D00FA23A6 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE52091B61D00FA23A6 /* CustomImageView.swift */; };
+		728FACE82091C2DF00FA23A6 /* FirebaseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */; };
+		728FACED2091D51B00FA23A6 /* PostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACEC2091D51B00FA23A6 /* PostController.swift */; };
+		728FACEF2091D65E00FA23A6 /* PostTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACEE2091D65E00FA23A6 /* PostTextView.swift */; };
+		728FACF12091D6FF00FA23A6 /* PostCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACF02091D6FF00FA23A6 /* PostCreationView.swift */; };
 		72C50E1520906FE6005B0F19 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C50E1420906FE6005B0F19 /* AppDelegate.swift */; };
-		72C50E1720906FE6005B0F19 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72C50E1620906FE6005B0F19 /* ViewController.swift */; };
 		72C50E1A20906FE6005B0F19 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72C50E1820906FE6005B0F19 /* Main.storyboard */; };
 		72C50E1C20906FE8005B0F19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 72C50E1B20906FE8005B0F19 /* Assets.xcassets */; };
 		72C50E1F20906FE8005B0F19 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 72C50E1D20906FE8005B0F19 /* LaunchScreen.storyboard */; };
+		72C50E2720907073005B0F19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 72C50E2620907073005B0F19 /* GoogleService-Info.plist */; };
+		9856E23F2C7074B7107A91B7 /* Pods_TwitterFirebase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CE174E49BF9941CC0AE828E /* Pods_TwitterFirebase.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1CE174E49BF9941CC0AE828E /* Pods_TwitterFirebase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwitterFirebase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66C1232CB11628FA18B77FA5 /* Pods-TwitterFirebase.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitterFirebase.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TwitterFirebase/Pods-TwitterFirebase.debug.xcconfig"; sourceTree = "<group>"; };
+		7253490C2090745200F244A3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		7253490F209075DC00F244A3 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		72534911209075EC00F244A3 /* SignUpController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
+		72534913209075F400F244A3 /* UI extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UI extensions.swift"; sourceTree = "<group>"; };
+		725349152090760800F244A3 /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		725349172090760C00F244A3 /* HomePostCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePostCell.swift; sourceTree = "<group>"; };
+		725349192090761500F244A3 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
+		7253491B2090761A00F244A3 /* CustomAnimationPresentor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresentor.swift; sourceTree = "<group>"; };
+		7253491D2090763500F244A3 /* MenuHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuHeader.swift; sourceTree = "<group>"; };
+		7253491E2090763500F244A3 /* MenuLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuLauncher.swift; sourceTree = "<group>"; };
+		7253491F2090763500F244A3 /* MenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		725349232090763E00F244A3 /* UserProfileMenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileMenuBar.swift; sourceTree = "<group>"; };
+		725349242090763E00F244A3 /* UserProfileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
+		725349252090763E00F244A3 /* UserProfileMenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileMenuCell.swift; sourceTree = "<group>"; };
+		725349262090763E00F244A3 /* UserProfileHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
+		7253493120907EDE00F244A3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		7253493320907FB400F244A3 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		72534935209080D500F244A3 /* SetupProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileController.swift; sourceTree = "<group>"; };
+		728FACE52091B61D00FA23A6 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseExtension.swift; sourceTree = "<group>"; };
+		728FACEC2091D51B00FA23A6 /* PostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostController.swift; sourceTree = "<group>"; };
+		728FACEE2091D65E00FA23A6 /* PostTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTextView.swift; sourceTree = "<group>"; };
+		728FACF02091D6FF00FA23A6 /* PostCreationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreationView.swift; sourceTree = "<group>"; };
 		72C50E1120906FE6005B0F19 /* TwitterFirebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterFirebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		72C50E1420906FE6005B0F19 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		72C50E1620906FE6005B0F19 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		72C50E1920906FE6005B0F19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		72C50E1B20906FE8005B0F19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		72C50E1E20906FE8005B0F19 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		72C50E2020906FE8005B0F19 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		72C50E2620907073005B0F19 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		78FA690A6C67683797A73099 /* Pods-TwitterFirebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TwitterFirebase.release.xcconfig"; path = "Pods/Target Support Files/Pods-TwitterFirebase/Pods-TwitterFirebase.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +79,99 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9856E23F2C7074B7107A91B7 /* Pods_TwitterFirebase.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2834286EF609210FB842DC10 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1CE174E49BF9941CC0AE828E /* Pods_TwitterFirebase.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7253492B209079BB00F244A3 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				7253491E2090763500F244A3 /* MenuLauncher.swift */,
+				7253491D2090763500F244A3 /* MenuHeader.swift */,
+				7253491F2090763500F244A3 /* MenuCell.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		7253492C209079C600F244A3 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				7253490F209075DC00F244A3 /* LoginController.swift */,
+				72534911209075EC00F244A3 /* SignUpController.swift */,
+				72534935209080D500F244A3 /* SetupProfileController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		7253492D209079CE00F244A3 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				725349242090763E00F244A3 /* UserProfileController.swift */,
+				725349262090763E00F244A3 /* UserProfileHeader.swift */,
+				725349232090763E00F244A3 /* UserProfileMenuBar.swift */,
+				725349252090763E00F244A3 /* UserProfileMenuCell.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		7253492E209079E100F244A3 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				72534913209075F400F244A3 /* UI extensions.swift */,
+				725349192090761500F244A3 /* CustomAnimationDismisser.swift */,
+				7253491B2090761A00F244A3 /* CustomAnimationPresentor.swift */,
+				728FACE52091B61D00FA23A6 /* CustomImageView.swift */,
+				728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		7253492F209079EE00F244A3 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				725349152090760800F244A3 /* HomeController.swift */,
+				725349172090760C00F244A3 /* HomePostCell.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		7253493020907ED100F244A3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7253493120907EDE00F244A3 /* User.swift */,
+				7253493320907FB400F244A3 /* Post.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		728FACE92091D46500FA23A6 /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				728FACEC2091D51B00FA23A6 /* PostController.swift */,
+				728FACF02091D6FF00FA23A6 /* PostCreationView.swift */,
+				728FACEE2091D65E00FA23A6 /* PostTextView.swift */,
+			);
+			path = Post;
+			sourceTree = "<group>";
+		};
 		72C50E0820906FE6005B0F19 = {
 			isa = PBXGroup;
 			children = (
 				72C50E1320906FE6005B0F19 /* TwitterFirebase */,
 				72C50E1220906FE6005B0F19 /* Products */,
+				A8D9725CDC872F65DB18C8E5 /* Pods */,
+				2834286EF609210FB842DC10 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +186,31 @@
 		72C50E1320906FE6005B0F19 /* TwitterFirebase */ = {
 			isa = PBXGroup;
 			children = (
+				728FACE92091D46500FA23A6 /* Post */,
+				7253492C209079C600F244A3 /* Login */,
+				7253492B209079BB00F244A3 /* Menu */,
+				7253492F209079EE00F244A3 /* Home */,
+				7253492D209079CE00F244A3 /* UserProfile */,
+				7253493020907ED100F244A3 /* Model */,
+				7253490C2090745200F244A3 /* MainTabBarController.swift */,
 				72C50E1420906FE6005B0F19 /* AppDelegate.swift */,
-				72C50E1620906FE6005B0F19 /* ViewController.swift */,
-				72C50E1820906FE6005B0F19 /* Main.storyboard */,
+				7253492E209079E100F244A3 /* Utils */,
 				72C50E1B20906FE8005B0F19 /* Assets.xcassets */,
 				72C50E1D20906FE8005B0F19 /* LaunchScreen.storyboard */,
 				72C50E2020906FE8005B0F19 /* Info.plist */,
+				72C50E2620907073005B0F19 /* GoogleService-Info.plist */,
+				72C50E1820906FE6005B0F19 /* Main.storyboard */,
 			);
 			path = TwitterFirebase;
+			sourceTree = "<group>";
+		};
+		A8D9725CDC872F65DB18C8E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				66C1232CB11628FA18B77FA5 /* Pods-TwitterFirebase.debug.xcconfig */,
+				78FA690A6C67683797A73099 /* Pods-TwitterFirebase.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +220,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C50E2320906FE8005B0F19 /* Build configuration list for PBXNativeTarget "TwitterFirebase" */;
 			buildPhases = (
+				80F75DD4720C90FBA7BF6661 /* [CP] Check Pods Manifest.lock */,
 				72C50E0D20906FE6005B0F19 /* Sources */,
 				72C50E0E20906FE6005B0F19 /* Frameworks */,
 				72C50E0F20906FE6005B0F19 /* Resources */,
+				0FE152D4C59C24F98BDF797B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -123,6 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				72C50E1F20906FE8005B0F19 /* LaunchScreen.storyboard in Resources */,
+				72C50E2720907073005B0F19 /* GoogleService-Info.plist in Resources */,
 				72C50E1C20906FE8005B0F19 /* Assets.xcassets in Resources */,
 				72C50E1A20906FE6005B0F19 /* Main.storyboard in Resources */,
 			);
@@ -130,13 +282,80 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0FE152D4C59C24F98BDF797B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-TwitterFirebase/Pods-TwitterFirebase-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TwitterFirebase/Pods-TwitterFirebase-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		80F75DD4720C90FBA7BF6661 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TwitterFirebase-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		72C50E0D20906FE6005B0F19 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72C50E1720906FE6005B0F19 /* ViewController.swift in Sources */,
+				725349272090763E00F244A3 /* UserProfileMenuBar.swift in Sources */,
+				725349292090763E00F244A3 /* UserProfileMenuCell.swift in Sources */,
 				72C50E1520906FE6005B0F19 /* AppDelegate.swift in Sources */,
+				7253491C2090761A00F244A3 /* CustomAnimationPresentor.swift in Sources */,
+				725349222090763500F244A3 /* MenuCell.swift in Sources */,
+				728FACEF2091D65E00FA23A6 /* PostTextView.swift in Sources */,
+				725349282090763E00F244A3 /* UserProfileController.swift in Sources */,
+				72534910209075DC00F244A3 /* LoginController.swift in Sources */,
+				728FACE82091C2DF00FA23A6 /* FirebaseExtension.swift in Sources */,
+				72534936209080D500F244A3 /* SetupProfileController.swift in Sources */,
+				7253493220907EDE00F244A3 /* User.swift in Sources */,
+				728FACE62091B61D00FA23A6 /* CustomImageView.swift in Sources */,
+				725349202090763500F244A3 /* MenuHeader.swift in Sources */,
+				725349162090760800F244A3 /* HomeController.swift in Sources */,
+				725349182090760C00F244A3 /* HomePostCell.swift in Sources */,
+				728FACF12091D6FF00FA23A6 /* PostCreationView.swift in Sources */,
+				7253490D2090745200F244A3 /* MainTabBarController.swift in Sources */,
+				728FACED2091D51B00FA23A6 /* PostController.swift in Sources */,
+				7253492A2090763E00F244A3 /* UserProfileHeader.swift in Sources */,
+				725349212090763500F244A3 /* MenuLauncher.swift in Sources */,
+				72534912209075EC00F244A3 /* SignUpController.swift in Sources */,
+				7253493420907FB400F244A3 /* Post.swift in Sources */,
+				72534914209075F400F244A3 /* UI extensions.swift in Sources */,
+				7253491A2090761600F244A3 /* CustomAnimationDismisser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +497,7 @@
 		};
 		72C50E2420906FE8005B0F19 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 66C1232CB11628FA18B77FA5 /* Pods-TwitterFirebase.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -296,6 +516,7 @@
 		};
 		72C50E2520906FE8005B0F19 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 78FA690A6C67683797A73099 /* Pods-TwitterFirebase.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
