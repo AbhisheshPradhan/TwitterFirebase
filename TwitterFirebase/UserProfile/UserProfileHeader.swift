@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Firebase
 
 protocol UserProfileHeaderDelegate {
     func didTapLogOut()
@@ -16,6 +16,7 @@ protocol UserProfileHeaderDelegate {
 class UserProfileHeader: UICollectionViewCell {
     
     var delegate : UserProfileHeaderDelegate?
+    var isCurrentUser = false
     
     var user: User? {
         didSet {
@@ -24,11 +25,14 @@ class UserProfileHeader: UICollectionViewCell {
             
             guard let fullname = user?.fullname else { return }
             guard let username = user?.username else { return }
-            print("username: \(username) & fullname: \(fullname)")
             
             let attributedText = NSMutableAttributedString(string: fullname + "\n", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 18)])
             attributedText.append(NSAttributedString(string: "@" + username, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
             usernameLabel.attributedText = attributedText
+            
+            setupFollowButton()
+            setupTotalFollowers()
+            setupTotalFollowing()
         }
     }
     
@@ -42,28 +46,33 @@ class UserProfileHeader: UICollectionViewCell {
         addSubview(usernameLabel)
         addSubview(followingLabel)
         addSubview(followersLabel)
-        addSubview(logoutButton)
+        
+        addSubview(followingLabel)
+        addSubview(followersLabel)
+        addSubview(menuBar)
+        addSubview(bottomDividerView)
         
         userProfileImage.anchor(top: topAnchor, left: leftAnchor,  paddingTop: 16, paddingLeft: 16, width: 80, height: 80)
         userProfileImage.layer.cornerRadius = 80 / 2
         userProfileImage.contentMode = .scaleAspectFill
         
-        logoutButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
         
-        addSubview(usernameLabel)
         usernameLabel.anchor(top: userProfileImage.bottomAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 16)
-        
-        addSubview(followingLabel)
-        addSubview(followersLabel)
-        addSubview(bottomDividerView)
-        addSubview(menuBar)
-        
         followingLabel.anchor(top: usernameLabel.bottomAnchor, left: leftAnchor, right: followersLabel.leftAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 8)
         followersLabel.anchor(top: usernameLabel.bottomAnchor, left: followingLabel.rightAnchor, paddingTop: 16, paddingLeft: 16)
-        
         menuBar.anchor(top: followingLabel.bottomAnchor, left: leftAnchor, bottom: bottomDividerView.topAnchor, right: rightAnchor, paddingTop: 8)
-        
         bottomDividerView.anchor( left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 0.5)
+    }
+    
+    func setupLogoutOrFollowButton(){
+        if isCurrentUser == true {
+            addSubview(logoutButton)
+            logoutButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
+        }
+        else {
+            addSubview(followButton)
+            followButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 100, height: 30)
+        }
     }
     
     let menuBar: UserProfileMenuBar = {
@@ -89,26 +98,149 @@ class UserProfileHeader: UICollectionViewCell {
         return label
     }()
     
-    let followingLabel:UILabel = {
+    lazy var followingLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        let attributedText = NSMutableAttributedString(string: "115", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
-        attributedText.append(NSAttributedString(string: " Following", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
-        label.attributedText = attributedText
         return label
     }()
     
-    let followersLabel:UILabel = {
+    func setupTotalFollowing(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = user?.uid else { return }
+        var currentUserPage = ""
+        if currentLoggedInUserId == userId {
+            currentUserPage = currentLoggedInUserId
+        }
+        else {
+            currentUserPage = userId
+        }
+        
+        Database.database().reference().child("following").child(currentUserPage).observe(.value, with: { (snapshot) in
+            let total = Int(snapshot.childrenCount)
+            let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
+            attributedText.append(NSAttributedString(string: " Following", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+            
+            self.followingLabel.attributedText = attributedText
+        }) { (err) in
+            print("error counting total posts")
+        }
+    }
+    
+    lazy var followersLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        let attributedText = NSMutableAttributedString(string: "11", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
-        attributedText.append(NSAttributedString(string: " Followers", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
-        label.attributedText = attributedText
+
         return label
     }()
+    
+    func setupTotalFollowers(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = user?.uid else { return }
+        var currentUserPage = ""
+        if currentLoggedInUserId == userId {
+            currentUserPage = currentLoggedInUserId
+        }
+        else {
+            currentUserPage = userId
+        }
+        
+        Database.database().reference().child("followers").child(currentUserPage).observe(.value, with: { (snapshot) in
+            let total = Int(snapshot.childrenCount)
+            let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
+            attributedText.append(NSAttributedString(string: " Followers", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+            self.followersLabel.attributedText = attributedText
+        }) { (err) in
+            print("error counting total posts")
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    lazy var followButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Follow", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 3
+        button.addTarget(self, action: #selector(handleFollow), for: .touchUpInside)
+        return button
+    }()
+    
+    func setupFollowButton(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = user?.uid else { return }
+        
+        if currentLoggedInUserId == userId {
+            addSubview(logoutButton)
+            logoutButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
+        } else {
+            addSubview(followButton)
+            followButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 100, height: 30)
+        }
+        Database.database().reference().child("following").child(currentLoggedInUserId).child(userId).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            if let isFollowing = snapshot.value as? Int, isFollowing == 1 {
+                self.followButton.setTitle("Unfollow", for: .normal)
+            } else {
+                self.followButton.setTitle("Follow", for: .normal)
+            }
+        }) { (err) in
+            print("Failed to check if following:", err)
+        }
+    }
+    
+    @objc func handleFollow(){
+        print("Following user")
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        
+        guard let userId = user?.uid else { return }
+        
+        //unfollow
+        if followButton.titleLabel?.text == "Unfollow" {
+            Database.database().reference().child("followers").child(userId).child(currentLoggedInUserId).removeValue {(err, ref) in
+                if let err = err{
+                    print("Failed to unfollow user:", err)
+                    return
+                }
+                Database.database().reference().child("following").child(currentLoggedInUserId).child(userId).removeValue { (err, ref) in
+                    if let err = err{
+                        print("Failed to unfollow user:", err)
+                        return
+                    }
+                    print("Successfully unfollowed user:", self.user?.username ?? "")
+                    
+                    self.followButton.setTitle("Follow", for: .normal)
+                    //                self.followButton.backgroundColor = .white
+                    //                self.followButton.setTitleColor(.black, for: .normal)
+                }
+            }
+        }else {
+            let ref1 = Database.database().reference().child("following").child(currentLoggedInUserId)
+            let ref2 = Database.database().reference().child("followers").child(userId)
+            let values1 = [userId: 1]
+            let values2 = [currentLoggedInUserId: 1]
+            
+            ref2.updateChildValues(values2) { (err, ref) in
+                if let err = err{
+                    print("Failed to follow user", err)
+                    return
+                }
+                ref1.updateChildValues(values1) { (err, ref) in
+                    if let err = err{
+                        print("Failed to follow user", err)
+                        return
+                    }
+                    print("Successfully followed user", self.user?.username ?? "")
+                    self.followButton.setTitle("Unfollow", for: .normal)
+                    //                self.followButton.backgroundColor = .white
+                    //                self.followButton.setTitleColor(.black, for: .normal)
+                }
+            }
+        }
     }
     
     lazy var logoutButton: UIButton = {

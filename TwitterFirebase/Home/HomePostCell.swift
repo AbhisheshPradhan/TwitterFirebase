@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol HomePostCellDelegate {
-    func didTapUserProfileImageFromHomePage()
+    func didTapUserProfileImageFromHomePage(post: Post)
 }
 
 
@@ -18,6 +18,7 @@ class HomePostCell: UICollectionViewCell
 {
     
     var delegate: HomePostCellDelegate?
+    var user: User?
     
     var post: Post? {
         didSet{
@@ -56,7 +57,9 @@ class HomePostCell: UICollectionViewCell
     
     func setupTweet(){
         
-        let stackView = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
+        let stackView = UIStackView(arrangedSubviews: [replyButton, retweetButton, likeButton, shareButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
         
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = UIColor.lightGray
@@ -74,10 +77,9 @@ class HomePostCell: UICollectionViewCell
         userProfileImage.anchor(top: topAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 16, width: 50, height: 50)
         usernameLabel.anchor(top: topAnchor, left: userProfileImage.rightAnchor, right: rightAnchor, paddingTop: 8, paddingLeft: 8, height: 14)
         
-        stackView.distribution = .fillEqually
-        stackView.anchor(left: userProfileImage.rightAnchor, bottom: bottomDividerView.topAnchor, right: rightAnchor, paddingBot: 8, paddingRight: 8, height: 20)
+        tweetText.anchor(top: usernameLabel.bottomAnchor, left: userProfileImage.rightAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingLeft: 8, paddingBot: 8, paddingRight: 8)
         
-        tweetText.anchor(top: usernameLabel.bottomAnchor, left: userProfileImage.rightAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingTop: 4, paddingLeft: 8, paddingBot: 8, paddingRight: 8)
+        stackView.anchor(left: userProfileImage.rightAnchor, bottom: bottomDividerView.topAnchor, right: rightAnchor, paddingLeft: -16, paddingBot: 8, paddingRight: 32)
         
         bottomDividerView.anchor( left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 0.5)
     }
@@ -93,8 +95,7 @@ class HomePostCell: UICollectionViewCell
     }()
     
     @objc func handleOpenUserProfile(){
-        print("Open User profile")
-        delegate?.didTapUserProfileImageFromHomePage()
+        delegate?.didTapUserProfileImageFromHomePage(post: post!)
     }
     
     let usernameLabel: UILabel = {
@@ -112,9 +113,9 @@ class HomePostCell: UICollectionViewCell
         return textView
     }()
     
-    lazy var commentButton: UIButton = {
+    lazy var replyButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "reply").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleCommentButtonPressed), for: .touchUpInside)
         return button
     }()
@@ -136,7 +137,7 @@ class HomePostCell: UICollectionViewCell
     
     lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "like_unselected").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleLikeButtonPressed), for: .touchUpInside)
         return button
     }()
@@ -147,7 +148,7 @@ class HomePostCell: UICollectionViewCell
     
     lazy var shareButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "share").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "message").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(handleShareButtonPressed), for: .touchUpInside)
         return button
     }()

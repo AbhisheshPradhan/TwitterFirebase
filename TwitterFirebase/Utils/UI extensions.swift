@@ -27,8 +27,8 @@ extension UIColor{
         return UIColor.rgb(red: 98, green: 239, blue: 247)
     }
     
-    static func bgGray() -> UIColor{
-        return UIColor.rgb(red: 211, green: 211, blue: 211)
+    static func bgColor() -> UIColor{
+        return UIColor.rgb(red: 232, green: 236, blue: 241)
     }
 }
 

@@ -38,8 +38,6 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
     }()
     
     func didTapUserProfileImage() {
-        print("Going to user's profile from Home Controller")
-        
         UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.blackView.alpha = 0
             if let window = UIApplication.shared.keyWindow {
@@ -136,8 +134,6 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.user = user
             self.collectionView.reloadData()
-            
-            print("self.user values: ", self.user ?? "")
         }
     }
     

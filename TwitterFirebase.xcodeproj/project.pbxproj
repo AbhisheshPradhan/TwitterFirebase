@@ -25,6 +25,10 @@
 		7253493220907EDE00F244A3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493120907EDE00F244A3 /* User.swift */; };
 		7253493420907FB400F244A3 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7253493320907FB400F244A3 /* Post.swift */; };
 		72534936209080D500F244A3 /* SetupProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72534935209080D500F244A3 /* SetupProfileController.swift */; };
+		727A97BE2092E02500B96483 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A97BD2092E02500B96483 /* SearchController.swift */; };
+		727A97C12092E08600B96483 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A97C02092E08600B96483 /* NotificationController.swift */; };
+		727A97C32092E09C00B96483 /* MessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A97C22092E09C00B96483 /* MessageController.swift */; };
+		727A97C62092F6D400B96483 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 727A97C52092F6D400B96483 /* SearchCell.swift */; };
 		728FACE62091B61D00FA23A6 /* CustomButtonClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE52091B61D00FA23A6 /* CustomButtonClasses.swift */; };
 		728FACE82091C2DF00FA23A6 /* FirebaseExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */; };
 		728FACED2091D51B00FA23A6 /* PostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728FACEC2091D51B00FA23A6 /* PostController.swift */; };
@@ -59,6 +63,10 @@
 		7253493120907EDE00F244A3 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7253493320907FB400F244A3 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		72534935209080D500F244A3 /* SetupProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileController.swift; sourceTree = "<group>"; };
+		727A97BD2092E02500B96483 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		727A97C02092E08600B96483 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		727A97C22092E09C00B96483 /* MessageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageController.swift; sourceTree = "<group>"; };
+		727A97C52092F6D400B96483 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		728FACE52091B61D00FA23A6 /* CustomButtonClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonClasses.swift; sourceTree = "<group>"; };
 		728FACE72091C2DF00FA23A6 /* FirebaseExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseExtension.swift; sourceTree = "<group>"; };
 		728FACEC2091D51B00FA23A6 /* PostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostController.swift; sourceTree = "<group>"; };
@@ -155,6 +163,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		727A97BC2092DFEF00B96483 /* OtherTabBarItems */ = {
+			isa = PBXGroup;
+			children = (
+				727A97C02092E08600B96483 /* NotificationController.swift */,
+				727A97C22092E09C00B96483 /* MessageController.swift */,
+			);
+			path = OtherTabBarItems;
+			sourceTree = "<group>";
+		};
+		727A97C42092F68E00B96483 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				727A97BD2092E02500B96483 /* SearchController.swift */,
+				727A97C52092F6D400B96483 /* SearchCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		728FACE92091D46500FA23A6 /* Post */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +212,8 @@
 		72C50E1320906FE6005B0F19 /* TwitterFirebase */ = {
 			isa = PBXGroup;
 			children = (
+				727A97C42092F68E00B96483 /* Search */,
+				727A97BC2092DFEF00B96483 /* OtherTabBarItems */,
 				728FACE92091D46500FA23A6 /* Post */,
 				7253492C209079C600F244A3 /* Login */,
 				7253492B209079BB00F244A3 /* Menu */,
@@ -333,6 +361,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				725349272090763E00F244A3 /* UserProfileMenuBar.swift in Sources */,
+				727A97BE2092E02500B96483 /* SearchController.swift in Sources */,
 				725349292090763E00F244A3 /* UserProfileMenuCell.swift in Sources */,
 				72C50E1520906FE6005B0F19 /* AppDelegate.swift in Sources */,
 				7253491C2090761A00F244A3 /* CustomAnimationPresentor.swift in Sources */,
@@ -348,11 +377,14 @@
 				725349162090760800F244A3 /* HomeController.swift in Sources */,
 				725349182090760C00F244A3 /* HomePostCell.swift in Sources */,
 				728FACF12091D6FF00FA23A6 /* PostCreationView.swift in Sources */,
+				727A97C62092F6D400B96483 /* SearchCell.swift in Sources */,
 				7253490D2090745200F244A3 /* MainTabBarController.swift in Sources */,
 				728FACED2091D51B00FA23A6 /* PostController.swift in Sources */,
+				727A97C32092E09C00B96483 /* MessageController.swift in Sources */,
 				7253492A2090763E00F244A3 /* UserProfileHeader.swift in Sources */,
 				725349212090763500F244A3 /* MenuLauncher.swift in Sources */,
 				72534912209075EC00F244A3 /* SignUpController.swift in Sources */,
+				727A97C12092E08600B96483 /* NotificationController.swift in Sources */,
 				7253493420907FB400F244A3 /* Post.swift in Sources */,
 				72534914209075F400F244A3 /* UI extensions.swift in Sources */,
 				7253491A2090761600F244A3 /* CustomAnimationDismisser.swift in Sources */,

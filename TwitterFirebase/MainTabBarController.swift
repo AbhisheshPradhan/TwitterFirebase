@@ -26,12 +26,10 @@ class MainTabBarController: UITabBarController {
     }
     
     func setupViewControllers(){
-        print("Setting tab bar view controllers.")
-        
         let homeNavController = templateNavController(unselected_image:#imageLiteral(resourceName: "home").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "home"), rootViewController: HomeController(collectionViewLayout: UICollectionViewFlowLayout()))
-        let searchNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "search").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "search"))
-        let notificationNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "bell").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "bell"))
-        let messageNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "message").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "message"))
+        let searchNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "navSearch").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "navSearch"),rootViewController: SearchController(collectionViewLayout: UICollectionViewFlowLayout()))
+        let notificationNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "bell").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "bell"), rootViewController: NotificationController())
+        let messageNavController = templateNavController(unselected_image: #imageLiteral(resourceName: "messages").withRenderingMode(.alwaysOriginal), selected_image: #imageLiteral(resourceName: "messages"), rootViewController: MessageController())
         
         viewControllers = [homeNavController, searchNavController, notificationNavController, messageNavController]
         guard let items = tabBar.items else { return }

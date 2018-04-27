@@ -21,7 +21,6 @@ class MenuHeader: UICollectionViewCell
         didSet {
             guard let fullname = user?.fullname else { return }
             guard let username = user?.username else { return }
-            print("username: \(username) & fullname: \(fullname)")
             
             let attributedText = NSMutableAttributedString(string: fullname + "\n", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
             attributedText.append(NSAttributedString(string: "@" + username, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
@@ -97,8 +96,6 @@ class MenuHeader: UICollectionViewCell
     }()
     
     @objc func handleOpenUserProfile(){
-        print("User Profile Image Pressed")
         delegate?.didTapUserProfileImage()
-   
     }
 }

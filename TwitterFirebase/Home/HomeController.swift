@@ -12,11 +12,11 @@ import Firebase
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HomePostCellDelegate
 {
     
-    func didTapUserProfileImageFromHomePage() {
+    func didTapUserProfileImageFromHomePage(post: Post) {
         print("Going to User's Profile from home controller")
-        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-        navigationController?.pushViewController(userProfileController, animated: true)
-     //   navigationController?.hidesBarsOnSwipe = false
+//        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+//        userProfileController.user = post.user
+//        navigationController?.pushViewController(userProfileController, animated: true)
     }
     
     let cellId = "cellId"
@@ -27,13 +27,17 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: PostController.updateFeedNotificationName, object: nil)
         
-        collectionView?.backgroundColor = .bgGray()
+        collectionView?.backgroundColor = .bgColor()
         self.navigationItem.title = "Home"
         
-
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         
         self.navigationController?.navigationBar.titleTextAttributes = [kCTFontAttributeName: UIFont.boldSystemFont(ofSize: 18)] as [NSAttributedStringKey : Any]
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView?.refreshControl = refreshControl
+        
         setupNavBarButtons()
         fetchAll()
     }
@@ -51,26 +55,21 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func fetchAll(){
         fetchPosts()
+        fetchFollowingUserIds()
     }
     
     func setupNavBarButtons(){
         self.navigationItem.leftBarButtonItem = userProfileImageButton
-        
         self.navigationItem.rightBarButtonItem = tweetButton
     }
     
-    var user: User?
-    let uid = Auth.auth().currentUser?.uid ?? ""
-    
-    
     lazy var userProfileImageButton: UIBarButtonItem = {
         let button = CustomImageButton()
-        
+        let uid = Auth.auth().currentUser?.uid ?? ""
         Database.fetchUserWithUID(uid: uid, completion: { (user) in
             let imageUrl = user.profileImageUrl
             button.loadImage(urlString: imageUrl)
             button.clipsToBounds = true
-            // button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
             button.layer.cornerRadius = 15
             button.layer.masksToBounds = true
             button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -87,7 +86,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     lazy var tweetButton: UIBarButtonItem = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "retweet"), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "compose"), for: .normal)
         let barButton = UIBarButtonItem()
         barButton.customView = button
         button.addTarget(self, action: #selector(handleShowCreateTweet), for: .touchUpInside)
@@ -97,7 +96,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     lazy var menuLauncher: MenuLauncher = {
         let launcher = MenuLauncher()
         launcher.homeController = self
-        print("launcher homeController set")
         return launcher
     }()
     
@@ -107,17 +105,14 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func showUserProfile(){
-        print("Showing User Profile")
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(userProfileController, animated: true)
-        // navigationController?.navigationBar.transparentNavigationBar()
     }
     
     @objc func handleShowCreateTweet(){
         print("Showing Tweet page")
         let postController = PostController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(postController, animated: true)
-        //  navigationController?.navigationBar.transparentNavigationBar()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -127,7 +122,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]
         let estimatedFrame = NSString(string: post.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         
-        return CGSize(width: view.frame.width, height: estimatedFrame.height + 80)
+        return CGSize(width: view.frame.width, height: estimatedFrame.height + 75)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -145,30 +140,54 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfileController.userId = posts[indexPath.item].user.uid
+        navigationController?.pushViewController(userProfileController, animated: true)
+    }
+    
     var posts = [Post]()
     
     fileprivate func fetchPosts(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.fetchUserWithUID(uid: uid) {(user) in
-            Database.database().reference().child("posts").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
-                
-                self.collectionView?.refreshControl?.endRefreshing()
-                guard let dictionaries = snapshot.value as? [String: Any] else { return }
-                dictionaries.forEach({ (key, value) in
-                    guard let dictionary = value as? [String: Any] else { return }
-                    let post = Post(user: user, dictionary: dictionary)
-                    self.posts.append(post)
-                    self.posts.sort(by: { (p1, p2) -> Bool in
-                        return p1.creationDate.compare(p2.creationDate) == .orderedDescending
-                    })
-                    self.collectionView?.reloadData()
-                })
-                
-            }, withCancel: { (err) in
-                print("Failed to fetch post")
-                return
-            })
+            self.fetchPostsWithUser(user: user)
         }
     }
     
+    fileprivate func fetchPostsWithUser(user: User) {
+        let ref = Database.database().reference().child("posts").child(user.uid)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            self.collectionView?.refreshControl?.endRefreshing()
+            
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            
+            dictionaries.forEach({ (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
+                let post = Post(user: user, dictionary: dictionary)
+                self.posts.append(post)
+                self.posts.sort(by: { (p1, p2) -> Bool in
+                    return p1.creationDate.compare(p2.creationDate) == .orderedDescending
+                })
+                self.collectionView?.reloadData()
+            })
+        }) { (err) in
+            print("Failed to fetch posts:", err)
+        }
+    }
+    
+    fileprivate func fetchFollowingUserIds(){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            guard let userIdsDictionary = snapshot.value as? [String: Any] else { return }
+            userIdsDictionary.forEach({ (key,value) in
+                Database.fetchUserWithUID(uid: key, completion: { (user) in
+                    self.fetchPostsWithUser(user: user)
+                })
+            })
+        }) { (err) in
+            print("Failed to fetch following user ids:", err)
+        }
+    }
 }

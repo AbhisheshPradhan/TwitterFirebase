@@ -13,26 +13,32 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
 {
     
     var user: User?
+    
     let cellId = "cellId"
     let headerId = "headerId"
     var posts = [Post]()
+    var userId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.backgroundColor = .white
+        collectionView?.backgroundColor = .bgColor()
         collectionView?.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
         self.navigationItem.rightBarButtonItem = tweetButton
-       // navigationController?.hidesBarsOnSwipe = true
+        
         NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: PostController.updateFeedNotificationName, object: nil)
         
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 250, left: 0, bottom: 0, right: 0)
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView?.refreshControl = refreshControl
         
         collectionView?.reloadData()
         fetchUser()
         fetchPosts()
     }
-   
+    
     @objc func handleUpdateFeed(){
         handleRefresh()
     }
@@ -44,10 +50,9 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         fetchPosts()
     }
     
-    
     lazy var tweetButton: UIBarButtonItem = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "retweet"), for: .normal)
+        button.setImage(#imageLiteral(resourceName: "compose"), for: .normal)
         let barButton = UIBarButtonItem()
         barButton.customView = button
         button.addTarget(self, action: #selector(handleShowCreateTweet), for: .touchUpInside)
@@ -82,6 +87,7 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! HomePostCell
         cell.post = posts[indexPath.item]
+        cell.user = self.user
         return cell
     }
     
@@ -97,7 +103,7 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     }
     
     func fetchUser(){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
         print("Current User: " + uid)
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.user = user
@@ -126,11 +132,13 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     }
     
     fileprivate func fetchPosts(){
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
         Database.fetchUserWithUID(uid: uid) {(user) in
             Database.database().reference().child("posts").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 self.collectionView?.refreshControl?.endRefreshing()
+                
                 guard let dictionaries = snapshot.value as? [String: Any] else { return }
                 dictionaries.forEach({ (key, value) in
                     guard let dictionary = value as? [String: Any] else { return }
