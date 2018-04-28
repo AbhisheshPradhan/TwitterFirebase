@@ -48,13 +48,9 @@ class PostController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func didSubmit(for post: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        print("post id:", self.post?.id ?? "")
-        
-        print("Inserting post:", post)
-        
         let values = ["uid": uid, "text": post, "creationDate": Date().timeIntervalSince1970] as [String : Any]
-        
-        Database.database().reference().child("posts").child(uid).childByAutoId().updateChildValues(values) { (err, ref) in
+        let postNode = Database.database().reference().child("posts").child(uid).childByAutoId()
+        postNode.updateChildValues(values) { (err, ref) in
             
             if let err = err {
                 print("Failed to insert Post", err)

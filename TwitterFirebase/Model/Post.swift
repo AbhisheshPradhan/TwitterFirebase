@@ -14,6 +14,8 @@ struct Post {
     let text: String
     let creationDate: Date
     let user: User
+    var hasLiked = false
+    var totalLikes = 0
     
     //casting the default value
     init(user: User, dictionary: [String : Any]){

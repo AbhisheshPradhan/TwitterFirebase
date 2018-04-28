@@ -7,17 +7,18 @@
 //
 
 import UIKit
-
+import Firebase
 
 protocol HomePostCellDelegate {
     func didTapUserProfileImageFromHomePage(post: Post)
+    func didLike(for cell: HomePostCell)
 }
-
 
 class HomePostCell: UICollectionViewCell
 {
     
     var delegate: HomePostCellDelegate?
+    
     var user: User?
     
     var post: Post? {
@@ -25,11 +26,33 @@ class HomePostCell: UICollectionViewCell
             guard let imageUrl = post?.user.profileImageUrl else { return }
             guard let fullname = post?.user.fullname else { return }
             guard let username = post?.user.username else { return }
+            guard let postId = post?.id else { return }
             
             userProfileImage.loadImage(urlString: imageUrl)
             
-            setupUsername(with: fullname, with: username )
+            setupUsername(with: fullname, with: username)
             tweetText.text = post?.text
+            
+            setupLikeButton(postId: postId)
+            
+        }
+    }
+    
+    func setupLikeButton(postId: String){
+        Database.database().reference().child("post-likes").child(postId).observeSingleEvent(of: .value, with: { (snapshot) in
+            let total = Int(snapshot.childrenCount)
+            
+            if total == 0 {
+                self.likeButton.setTitle("🖤", for: .normal)
+            } else if self.post?.hasLiked == true {
+                self.likeButton.setTitle("❤️" + "\(total)", for: .normal)
+                self.likeButton.setTitleColor(.black, for: .normal)
+            } else {
+                self.likeButton.setTitle("🖤 "+"\(total)", for: .normal)
+                self.likeButton.setTitleColor(.black, for: .normal)
+            }
+        }) { (err) in
+            print("Error setting total like")
         }
     }
     
@@ -58,8 +81,8 @@ class HomePostCell: UICollectionViewCell
     func setupTweet(){
         
         let stackView = UIStackView(arrangedSubviews: [replyButton, retweetButton, likeButton, shareButton])
-        stackView.axis = .horizontal
         stackView.distribution = .fillEqually
+        //   stackView.alignment = .leading
         
         let bottomDividerView = UIView()
         bottomDividerView.backgroundColor = UIColor.lightGray
@@ -75,13 +98,14 @@ class HomePostCell: UICollectionViewCell
         userProfileImage.layer.cornerRadius = 50/2
         
         userProfileImage.anchor(top: topAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 16, width: 50, height: 50)
-        usernameLabel.anchor(top: topAnchor, left: userProfileImage.rightAnchor, right: rightAnchor, paddingTop: 8, paddingLeft: 8, height: 14)
+        
+        usernameLabel.anchor(top: topAnchor, left: userProfileImage.rightAnchor, right: rightAnchor, paddingTop: 8, paddingLeft: 12, paddingRight: 8, height: 15)
         
         tweetText.anchor(top: usernameLabel.bottomAnchor, left: userProfileImage.rightAnchor, bottom: stackView.topAnchor, right: rightAnchor, paddingLeft: 8, paddingBot: 8, paddingRight: 8)
         
-        stackView.anchor(left: userProfileImage.rightAnchor, bottom: bottomDividerView.topAnchor, right: rightAnchor, paddingLeft: -16, paddingBot: 8, paddingRight: 32)
+        stackView.anchor(left: userProfileImage.rightAnchor, bottom: bottomDividerView.topAnchor, right: tweetText.rightAnchor, paddingLeft: -8, paddingBot: 8, paddingRight: 32, height: 20)
         
-        bottomDividerView.anchor( left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 0.5)
+        bottomDividerView.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 0.5)
     }
     
     lazy var userProfileImage: CustomImageButton = {
@@ -107,9 +131,8 @@ class HomePostCell: UICollectionViewCell
         let textView = UITextView()
         textView.font = UIFont.systemFont(ofSize: 14)
         textView.isEditable = false
-        textView.text = "Here is a sample caption to test dafasd fdas fd safds afsda fsda fsda fdsa fsda fsd afsad f sad"
+        textView.text = "1234"
         textView.isScrollEnabled = false
-        textView.isEditable = false
         return textView
     }()
     
@@ -137,13 +160,13 @@ class HomePostCell: UICollectionViewCell
     
     lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "like").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setTitle("🖤", for: .normal)
         button.addTarget(self, action: #selector(handleLikeButtonPressed), for: .touchUpInside)
         return button
     }()
     
     @objc func handleLikeButtonPressed(){
-        print("Like Button Pressed")
+        delegate?.didLike(for: self)
     }
     
     lazy var shareButton: UIButton = {

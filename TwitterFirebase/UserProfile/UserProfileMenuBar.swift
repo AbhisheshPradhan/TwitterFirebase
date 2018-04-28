@@ -32,7 +32,6 @@ class UserProfileMenuBar: UIView, UICollectionViewDataSource,  UICollectionViewD
         return cv
     }()
     
-    
     var horizontalBarLeftAnchorConstraint : NSLayoutConstraint?
     
     func setupHorizontalBar(){
@@ -45,7 +44,7 @@ class UserProfileMenuBar: UIView, UICollectionViewDataSource,  UICollectionViewD
         horizontalBarLeftAnchorConstraint?.isActive = true
         horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1/4).isActive = true
-        horizontalBarView.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 2).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

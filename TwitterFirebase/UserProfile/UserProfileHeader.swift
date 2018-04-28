@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 protocol UserProfileHeaderDelegate {
-    func didTapLogOut()
+    func didTapSettings()
 }
 
 class UserProfileHeader: UICollectionViewCell {
@@ -55,9 +55,8 @@ class UserProfileHeader: UICollectionViewCell {
         userProfileImage.anchor(top: topAnchor, left: leftAnchor,  paddingTop: 16, paddingLeft: 16, width: 80, height: 80)
         userProfileImage.layer.cornerRadius = 80 / 2
         userProfileImage.contentMode = .scaleAspectFill
-        
-        
         usernameLabel.anchor(top: userProfileImage.bottomAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 16)
+        
         followingLabel.anchor(top: usernameLabel.bottomAnchor, left: leftAnchor, right: followersLabel.leftAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 8)
         followersLabel.anchor(top: usernameLabel.bottomAnchor, left: followingLabel.rightAnchor, paddingTop: 16, paddingLeft: 16)
         menuBar.anchor(top: followingLabel.bottomAnchor, left: leftAnchor, bottom: bottomDividerView.topAnchor, right: rightAnchor, paddingTop: 8)
@@ -66,8 +65,8 @@ class UserProfileHeader: UICollectionViewCell {
     
     func setupLogoutOrFollowButton(){
         if isCurrentUser == true {
-            addSubview(logoutButton)
-            logoutButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
+            addSubview(settingsButton)
+            settingsButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
         }
         else {
             addSubview(followButton)
@@ -98,6 +97,15 @@ class UserProfileHeader: UICollectionViewCell {
         return label
     }()
     
+    lazy var userBio: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 14)
+        textView.isEditable = false
+        textView.text = "Some Bio Text"
+        textView.isScrollEnabled = false
+        return textView
+    }()
+    
     lazy var followingLabel:UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -107,6 +115,7 @@ class UserProfileHeader: UICollectionViewCell {
     func setupTotalFollowing(){
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
         guard let userId = user?.uid else { return }
+        var total = 0
         var currentUserPage = ""
         if currentLoggedInUserId == userId {
             currentUserPage = currentLoggedInUserId
@@ -116,13 +125,13 @@ class UserProfileHeader: UICollectionViewCell {
         }
         
         Database.database().reference().child("following").child(currentUserPage).observe(.value, with: { (snapshot) in
-            let total = Int(snapshot.childrenCount)
+            total = Int(snapshot.childrenCount)
             let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
             attributedText.append(NSAttributedString(string: " Following", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
             
             self.followingLabel.attributedText = attributedText
         }) { (err) in
-            print("error counting total posts")
+            print("error counting total following")
         }
     }
     
@@ -137,6 +146,7 @@ class UserProfileHeader: UICollectionViewCell {
         guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
         guard let userId = user?.uid else { return }
         var currentUserPage = ""
+        var total = 0
         if currentLoggedInUserId == userId {
             currentUserPage = currentLoggedInUserId
         }
@@ -145,12 +155,12 @@ class UserProfileHeader: UICollectionViewCell {
         }
         
         Database.database().reference().child("followers").child(currentUserPage).observe(.value, with: { (snapshot) in
-            let total = Int(snapshot.childrenCount)
+            total = Int(snapshot.childrenCount)
             let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)])
             attributedText.append(NSAttributedString(string: " Followers", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
             self.followersLabel.attributedText = attributedText
         }) { (err) in
-            print("error counting total posts")
+            print("error counting total Followers")
         }
     }
     
@@ -175,8 +185,8 @@ class UserProfileHeader: UICollectionViewCell {
         guard let userId = user?.uid else { return }
         
         if currentLoggedInUserId == userId {
-            addSubview(logoutButton)
-            logoutButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
+            addSubview(settingsButton)
+            settingsButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 30, height: 30)
         } else {
             addSubview(followButton)
             followButton.anchor(top: topAnchor, right: rightAnchor, paddingTop: 16, paddingRight: 16, width: 100, height: 30)
@@ -243,15 +253,16 @@ class UserProfileHeader: UICollectionViewCell {
         }
     }
     
-    lazy var logoutButton: UIButton = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "logout").withRenderingMode(.alwaysOriginal), for: .normal)
-        button.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
+    lazy var settingsButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("•••", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
         return button
     }()
     
-    @objc func handleLogout(){
+    @objc func handleSettings(){
         print("logout pressed from user profile")
-        delegate?.didTapLogOut()
+        delegate?.didTapSettings()
     }
 }

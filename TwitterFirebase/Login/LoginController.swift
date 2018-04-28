@@ -74,7 +74,6 @@ class LoginController: UIViewController
     let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("Login", for: .normal)
-        //button.backgroundColor = .black
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
         button.titleLabel?.textColor = .white
         button.layer.cornerRadius = 5
@@ -101,11 +100,9 @@ class LoginController: UIViewController
     }()
     
     @objc func handleLogin(){
-        print("handling login")
-        
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
         
         Auth.auth().signIn(withEmail: email, password: password) { (user, err) in
             if let err = err{
@@ -116,6 +113,8 @@ class LoginController: UIViewController
                 return
             }
             print("Successfully logged in")
+            
+            guard let uid = Auth.auth().currentUser?.uid else { return }
             print("Current User:", uid)
             
             guard let mainTabBarController = UIApplication.shared.keyWindow?.rootViewController as? MainTabBarController else { return }
@@ -140,7 +139,6 @@ class LoginController: UIViewController
         stackView.axis = .vertical
         stackView.spacing = 10
         tophalfView.addSubview(stackView)
-        //        stackView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: (view.frame.height / 4), paddingLeft: 60, paddingRight: 60, height: 140)
         stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 30, paddingLeft: 60, paddingRight: 60, height: 140)
     }
     

@@ -9,14 +9,16 @@
 import UIKit
 import Firebase
 
-class UserProfileController: UICollectionViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate
+class UserProfileController: UICollectionViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate, HomePostCellDelegate
 {
+    func didTapUserProfileImageFromHomePage(post: Post) {
+        
+    }
     
     var user: User?
     
     let cellId = "cellId"
     let headerId = "headerId"
-    var posts = [Post]()
     var userId: String?
     
     override func viewDidLoad() {
@@ -37,6 +39,41 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         collectionView?.reloadData()
         fetchUser()
         fetchPosts()
+    }
+    
+    func didLike(for cell: HomePostCell){
+        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
+        var post = self.posts[indexPath.item]
+        guard let postId = post.id else{ return }
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let value = [uid: post.hasLiked == true ? 0 : 1 ]
+        
+        Database.database().reference().child("likes").child(postId).updateChildValues(value) { (err, _) in
+            return
+        }
+        
+        post.hasLiked = !post.hasLiked
+        self.posts[indexPath.item] = post
+        self.collectionView?.reloadItems(at: [indexPath])
+        
+        let value2 = [uid:1]
+        
+        if value == [uid : 1] {
+            Database.database().reference().child("post-likes").child(postId).updateChildValues(value2){ (err, ref) in
+                if let err = err {
+                    print("Failed to add post like", err)
+                    return
+                }
+            }
+        } else {
+            Database.database().reference().child("post-likes").child(postId).removeValue {(err, ref) in
+                if let err = err {
+                    print("Failed to remove post like", err)
+                    return
+                }
+            }
+        }
     }
     
     @objc func handleUpdateFeed(){
@@ -102,18 +139,14 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         return header
     }
     
-    func fetchUser(){
-        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
-        print("Current User: " + uid)
-        Database.fetchUserWithUID(uid: uid) { (user) in
-            self.user = user
-            self.collectionView?.reloadData()
-        }
-    }
-    
-    func didTapLogOut() {
-        print("Logging out")
+    func didTapSettings() {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "Edit Profile", style: .destructive, handler: { (_) in
+            do {
+                print("edit profile")
+                
+            }
+        }))
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do {
                 try Auth.auth().signOut()
@@ -131,29 +164,58 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         present(alertController, animated: true, completion: nil)
     }
     
+    var posts = [Post]()
+    
     fileprivate func fetchPosts(){
-        
         let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
         Database.fetchUserWithUID(uid: uid) {(user) in
-            Database.database().reference().child("posts").child(user.uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            self.fetchPostsWithUser(user: user)
+        }
+    }
+    
+    func fetchUser(){
+        let uid = userId ?? (Auth.auth().currentUser?.uid ?? "")
+        print("Current User: " + uid)
+        Database.fetchUserWithUID(uid: uid) { (user) in
+            self.user = user
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    fileprivate func fetchPostsWithUser(user: User) {
+        let ref = Database.database().reference().child("posts").child(user.uid)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            self.collectionView?.refreshControl?.endRefreshing()
+            
+            guard let dictionaries = snapshot.value as? [String: Any] else { return }
+            
+            dictionaries.forEach({ (key, value) in
+                guard let dictionary = value as? [String: Any] else { return }
                 
-                self.collectionView?.refreshControl?.endRefreshing()
+                var post = Post(user: user, dictionary: dictionary)
+                post.id = key
                 
-                guard let dictionaries = snapshot.value as? [String: Any] else { return }
-                dictionaries.forEach({ (key, value) in
-                    guard let dictionary = value as? [String: Any] else { return }
-                    let post = Post(user: user, dictionary: dictionary)
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                
+                Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if let value = snapshot.value as? Int, value == 1{
+                        post.hasLiked = true
+                    }
+                    else{
+                        post.hasLiked = false
+                    }
                     self.posts.append(post)
                     self.posts.sort(by: { (p1, p2) -> Bool in
                         return p1.creationDate.compare(p2.creationDate) == .orderedDescending
                     })
                     self.collectionView?.reloadData()
+                }, withCancel: { (err) in
+                    print("Failed to fetch like info for post")
                 })
-                
-            }, withCancel: { (err) in
-                print("Failed to fetch post")
-                return
             })
+        }) { (err) in
+            print("Failed to fetch posts:", err)
         }
     }
 }

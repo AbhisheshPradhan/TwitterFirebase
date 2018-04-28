@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 protocol MenuHeaderDelegate {
     func didTapUserProfileImage()
@@ -29,6 +30,8 @@ class MenuHeader: UICollectionViewCell
             guard let imageUrl = user?.profileImageUrl else { return }
 
             userProfileImage.loadImage(urlString: imageUrl)
+            setupTotalFollowing()
+            setupTotalFollowers()
         }
     }
     
@@ -77,7 +80,7 @@ class MenuHeader: UICollectionViewCell
         return label
     }()
     
-    let followingLabel: UILabel = {
+    lazy var followingLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         let attributedText = NSMutableAttributedString(string: "115", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
@@ -85,6 +88,28 @@ class MenuHeader: UICollectionViewCell
         label.attributedText = attributedText
         return label
     }()
+    
+    func setupTotalFollowing(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = user?.uid else { return }
+        var currentUserPage = ""
+        if currentLoggedInUserId == userId {
+            currentUserPage = currentLoggedInUserId
+        }
+        else {
+            currentUserPage = userId
+        }
+        
+        Database.database().reference().child("following").child(currentUserPage).observe(.value, with: { (snapshot) in
+            let total = Int(snapshot.childrenCount)
+            let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
+            attributedText.append(NSAttributedString(string: " Following", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+            
+            self.followingLabel.attributedText = attributedText
+        }) { (err) in
+            print("error counting total posts")
+        }
+    }
     
     let followersLabel: UILabel = {
         let label = UILabel()
@@ -94,6 +119,27 @@ class MenuHeader: UICollectionViewCell
         label.attributedText = attributedText
         return label
     }()
+    
+    func setupTotalFollowers(){
+        guard let currentLoggedInUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = user?.uid else { return }
+        var currentUserPage = ""
+        if currentLoggedInUserId == userId {
+            currentUserPage = currentLoggedInUserId
+        }
+        else {
+            currentUserPage = userId
+        }
+        
+        Database.database().reference().child("followers").child(currentUserPage).observe(.value, with: { (snapshot) in
+            let total = Int(snapshot.childrenCount)
+            let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
+            attributedText.append(NSAttributedString(string: " Followers", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+            self.followersLabel.attributedText = attributedText
+        }) { (err) in
+            print("error counting total posts")
+        }
+    }
     
     @objc func handleOpenUserProfile(){
         delegate?.didTapUserProfileImage()
