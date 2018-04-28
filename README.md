@@ -6,12 +6,14 @@ IMPLEMENTED:
 - Login/SignUp/Logout
 - Home/User Profile Structure
 - Sliding side-menu (Custom Animation)
-- Database structure to store User info
+- Twitter Posts
+- User Profile posts Pagination
+- Image Caching
+- Follow/Unfollow
 
 
 TODO:
-- Storing posts and display
-- Following and followers feature
+
 - Likes
-- Pagination
+- Main Feed Pagination
 - Edit Profile Option
