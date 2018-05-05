@@ -10,6 +10,7 @@ IMPLEMENTED:
 - User Profile posts Pagination
 - Image Caching
 - Follow/Unfollow
+- Twitter Splash via RevealingSplashView
 
 
 TODO:
