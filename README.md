@@ -14,6 +14,8 @@ IMPLEMENTED:
 
 <a href="https://imgflip.com/gif/29orc8"><img src="https://i.imgflip.com/29orc8.gif" title="made at imgflip.com"/></a>
 
+<a href="https://imgflip.com/gif/29orj3"><img src="https://i.imgflip.com/29orj3.gif" title="made at imgflip.com"/></a>
+
 
 
 TODO:
