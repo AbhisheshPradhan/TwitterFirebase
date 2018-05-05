@@ -11,10 +11,7 @@ import Firebase
 
 class UserProfileController: UICollectionViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegateFlowLayout, UserProfileHeaderDelegate, HomePostCellDelegate
 {
-    func didTapUserProfileImageFromHomePage(post: Post) {
-        
-    }
-    
+
     var user: User?
     
     let cellId = "cellId"
@@ -37,6 +34,8 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         collectionView?.refreshControl = refreshControl
         
         collectionView?.reloadData()
+        collectionView?.alwaysBounceVertical = true
+        
         fetchUser()
         fetchPosts()
     }
@@ -97,19 +96,22 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     }()
     
     @objc func handleShowCreateTweet(){
-        print("Create new tweet")
         let postController = PostController(collectionViewLayout: UICollectionViewFlowLayout())
-        navigationController?.pushViewController(postController, animated: true)
+        
+        let transition:CATransition = CATransition()
+        transition.duration = 0.3
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionMoveIn
+        transition.subtype = kCATransitionFromTop
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(postController, animated: false)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let post = posts[indexPath.item]
         let size = CGSize(width: view.frame.width - 82, height: 1000)
         let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]
-        
         let estimatedFrame = NSString(string: post.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
-        
         return CGSize(width: view.frame.width, height: estimatedFrame.height + 80)
     }
     
@@ -144,17 +146,14 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
         alertController.addAction(UIAlertAction(title: "Edit Profile", style: .destructive, handler: { (_) in
             do {
                 print("edit profile")
-                
             }
         }))
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
             do {
                 try Auth.auth().signOut()
-                
                 let loginController = LoginController()
                 let navController = UINavigationController(rootViewController: loginController)
                 self.present(navController, animated: true, completion: nil)
-                
             } catch let signOutErr {
                 print("Failed to sign out:", signOutErr)
             }
@@ -185,19 +184,13 @@ class UserProfileController: UICollectionViewController, UIImagePickerController
     fileprivate func fetchPostsWithUser(user: User) {
         let ref = Database.database().reference().child("posts").child(user.uid)
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            
             self.collectionView?.refreshControl?.endRefreshing()
-            
             guard let dictionaries = snapshot.value as? [String: Any] else { return }
-            
             dictionaries.forEach({ (key, value) in
                 guard let dictionary = value as? [String: Any] else { return }
-                
                 var post = Post(user: user, dictionary: dictionary)
                 post.id = key
-                
                 guard let uid = Auth.auth().currentUser?.uid else { return }
-                
                 Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                     if let value = snapshot.value as? Int, value == 1{
                         post.hasLiked = true

@@ -12,13 +12,6 @@ import Firebase
 class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HomePostCellDelegate
 {
     
-    func didTapUserProfileImageFromHomePage(post: Post) {
-        print("Going to User's Profile from home controller")
-        //        let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
-        //        userProfileController.user = post.user
-        //        navigationController?.pushViewController(userProfileController, animated: true)
-    }
-    
     let cellId = "cellId"
     
     private let homePostCell = HomePostCell()
@@ -37,6 +30,18 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         collectionView?.refreshControl = refreshControl
+        
+        collectionView?.alwaysBounceVertical = true
+        
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        rightSwipe.direction = UISwipeGestureRecognizerDirection.right
+        
+        self.view.addGestureRecognizer(rightSwipe)
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(swipe:)))
+        leftSwipe.direction = UISwipeGestureRecognizerDirection.left
+        
+        self.view.addGestureRecognizer(leftSwipe)
         
         setupNavBarButtons()
         fetchAll()
@@ -76,7 +81,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             button.layer.borderWidth = 0.5
             button.addTarget(self, action: #selector(self.handleShowMenu), for: .touchUpInside)
         })
-        
+
         let barButton = UIBarButtonItem()
         barButton.customView = button
         barButton.customView?.widthAnchor.constraint(equalToConstant: 30).isActive = true
@@ -98,21 +103,27 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         launcher.homeController = self
         return launcher
     }()
-    
+
     @objc func handleShowMenu(){
-        print("Showing menu")
         menuLauncher.showMenu()
     }
-    
+
     func showUserProfile(){
         let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
         navigationController?.pushViewController(userProfileController, animated: true)
     }
     
     @objc func handleShowCreateTweet(){
-        print("Showing Tweet page")
         let postController = PostController(collectionViewLayout: UICollectionViewFlowLayout())
-        navigationController?.pushViewController(postController, animated: true)
+        
+        let transition:CATransition = CATransition()
+        transition.duration = 0.3
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionMoveIn
+        transition.subtype = kCATransitionFromTop
+        self.navigationController!.view.layer.add(transition, forKey: kCATransition)
+        self.navigationController?.pushViewController(postController, animated: false)
+        
     }
     
     func didLike(for cell: HomePostCell){
@@ -149,7 +160,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
             }
         }
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
@@ -206,7 +216,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 post.id = key
                 
                 guard let uid = Auth.auth().currentUser?.uid else { return }
-                
                 Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
                     if let value = snapshot.value as? Int, value == 1{
                         post.hasLiked = true

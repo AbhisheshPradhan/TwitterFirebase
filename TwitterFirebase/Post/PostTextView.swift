@@ -12,7 +12,7 @@ class PostTextView: UITextView {
     
     fileprivate let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Enter Post"
+        label.text = "What's happening?"
         label.textColor = UIColor.lightGray
         return label
     }()

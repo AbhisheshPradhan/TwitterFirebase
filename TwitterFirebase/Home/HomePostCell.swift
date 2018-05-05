@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 
 protocol HomePostCellDelegate {
-    func didTapUserProfileImageFromHomePage(post: Post)
     func didLike(for cell: HomePostCell)
 }
 
@@ -27,14 +26,11 @@ class HomePostCell: UICollectionViewCell
             guard let fullname = post?.user.fullname else { return }
             guard let username = post?.user.username else { return }
             guard let postId = post?.id else { return }
-            
+            let timeAgoDisplay = post?.creationDate.timePassed()
             userProfileImage.loadImage(urlString: imageUrl)
-            
-            setupUsername(with: fullname, with: username)
+            setupUsername(with: fullname, with: username, date: timeAgoDisplay!)
             tweetText.text = post?.text
-            
             setupLikeButton(postId: postId)
-            
         }
     }
     
@@ -56,12 +52,11 @@ class HomePostCell: UICollectionViewCell
         }
     }
     
-    func setupUsername(with fullname: String, with username: String){
+    func setupUsername(with fullname: String, with username: String, date: String){
         let attributedText = NSMutableAttributedString(string: fullname, attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])
-        attributedText.append(NSAttributedString(string: " @" + username, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+        attributedText.append(NSAttributedString(string: " @" + username + " • " + date, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
         usernameLabel.attributedText = attributedText
     }
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -110,7 +105,7 @@ class HomePostCell: UICollectionViewCell
     
     lazy var userProfileImage: CustomImageButton = {
         let button = CustomImageButton()
-        button.addTarget(self, action: #selector(handleOpenUserProfile), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(handleOpenUserProfile), for: .touchUpInside)
         button.layer.cornerRadius = button.frame.width / 2
         button.layer.masksToBounds = true
         button.layer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
@@ -118,9 +113,9 @@ class HomePostCell: UICollectionViewCell
         return button
     }()
     
-    @objc func handleOpenUserProfile(){
-        delegate?.didTapUserProfileImageFromHomePage(post: post!)
-    }
+//    @objc func handleOpenUserProfile(){
+//        delegate?.didTapUserProfileImageFromHomePage(post: post!)
+//    }
     
     let usernameLabel: UILabel = {
         let label = UILabel()

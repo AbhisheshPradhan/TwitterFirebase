@@ -70,7 +70,6 @@ class MenuHeader: UICollectionViewCell
         return button
     }()
     
-    
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -130,7 +129,6 @@ class MenuHeader: UICollectionViewCell
         else {
             currentUserPage = userId
         }
-        
         Database.database().reference().child("followers").child(currentUserPage).observe(.value, with: { (snapshot) in
             let total = Int(snapshot.childrenCount)
             let attributedText = NSMutableAttributedString(string: "\(total)", attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14)])

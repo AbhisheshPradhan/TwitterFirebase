@@ -25,6 +25,8 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
 {
     var user: User?
     var homeController: HomeController?
+    var messageController: MessageController?
+    var tabBarController: MainTabBarController?
     let headerId = "headerId"
     let cellId = "cellId"
     
@@ -45,7 +47,7 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
                 self.collectionView.frame = CGRect(x: -width, y: 0, width: width, height: self.collectionView.frame.height)
             }
         }) { (bool) in
-            self.homeController?.showUserProfile()
+            self.messageController?.showUserProfile() ?? self.homeController?.showUserProfile()
         }
     }
     
@@ -72,7 +74,6 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
             
             if let window = UIApplication.shared.keyWindow {
                 let width: CGFloat = window.frame.width - (window.frame.width / 5)
-                
                 self.collectionView.frame = CGRect(x: -width, y: 0, width: width, height: self.collectionView.frame.height)
             }
         }
@@ -94,12 +95,10 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
-        //send value to cell from here
         let option = menuOptions[indexPath.item]
         cell.option = option
         return cell
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! MenuHeader
@@ -118,19 +117,15 @@ class MenuLauncher: NSObject, UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let option = menuOptions[indexPath.item]
-        
         if option.name == "Profile"{
             didTapUserProfileImage()
         }
-        
         handleDismiss()
     }
     
     func fetchUser(){
         guard let uid = Auth.auth().currentUser?.uid else { return }
-        
         print("Current User: " + uid)
-        
         Database.fetchUserWithUID(uid: uid) { (user) in
             self.user = user
             self.collectionView.reloadData()

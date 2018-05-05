@@ -23,7 +23,49 @@ class PostController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         collectionView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: -50, right: 0)
+        
+//        navigationItem.rightBarButtonItem = tweetButton
+        navigationItem.leftBarButtonItem = dismissButton
     }
+    
+//    let tweetButton : UIBarButtonItem = {
+//        let button = UIButton()
+//        let barButton = UIBarButtonItem()
+//        button.setTitle("Tweet", for: .normal)
+//        button.backgroundColor = .mainBlue()
+//        button.clipsToBounds = true
+//        button.layer.cornerRadius = 15
+//        button.layer.masksToBounds = true
+//        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+//        button.setTitleColor(.white, for: .normal)
+//        button.addTarget(self, action: #selector(handleTweet), for: .touchUpInside)
+//
+//        barButton.customView = button
+//        barButton.customView?.widthAnchor.constraint(equalToConstant: 65).isActive = true
+//        barButton.customView?.heightAnchor.constraint(equalToConstant: 30).isActive = true
+//        return barButton
+//    }()
+    
+//    @objc func handleTweet(){
+//        print("Tweet")
+//    }
+    
+    let dismissButton : UIBarButtonItem = {
+        let button = UIButton()
+        let barButton = UIBarButtonItem()
+        button.setImage(#imageLiteral(resourceName: "cancel"), for: .normal)
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
+        
+        barButton.customView = button
+        barButton.customView?.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        barButton.customView?.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return barButton
+    }()
+    
+    @objc func handleDismiss(){
+        self.navigationController?.popViewController(animated: false)
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,7 +78,7 @@ class PostController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     lazy var containerView: PostCreationView = {
-        let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
+        let frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: 50)
         let postInputView = PostCreationView(frame: frame)
         postInputView.delegate = self
         return postInputView
@@ -44,14 +86,12 @@ class PostController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     static let updateFeedNotificationName = NSNotification.Name(rawValue: "UpdateFeed")
     
-    
     func didSubmit(for post: String) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
         let values = ["uid": uid, "text": post, "creationDate": Date().timeIntervalSince1970] as [String : Any]
         let postNode = Database.database().reference().child("posts").child(uid).childByAutoId()
         postNode.updateChildValues(values) { (err, ref) in
-            
             if let err = err {
                 print("Failed to insert Post", err)
                 return

@@ -43,6 +43,38 @@ extension UIViewController {
         view.endEditing(true)
     }
     
+    @objc func handleSwipe(swipe: UISwipeGestureRecognizer){
+        let launcher = MenuLauncher()
+        switch swipe.direction.rawValue {
+        case 1:
+            
+            launcher.showMenu()
+            
+        case 2:
+            launcher.handleDismiss()
+            
+        default:
+            
+            
+            return
+        }
+    }
+    
+    func topMostViewController() -> UIViewController {
+        if self.presentedViewController == nil {
+            return self
+        }
+        if let navigation = self.presentedViewController as? UINavigationController {
+            return navigation.visibleViewController!.topMostViewController()
+        }
+        if let tab = self.presentedViewController as? UITabBarController {
+            if let selectedTab = tab.selectedViewController {
+                return selectedTab.topMostViewController()
+            }
+            return tab.topMostViewController()
+        }
+        return self.presentedViewController!.topMostViewController()
+    }
 }
 
 extension UIView {

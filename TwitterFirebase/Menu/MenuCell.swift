@@ -27,7 +27,6 @@ class MenuCell: UICollectionViewCell {
         iconImage.clipsToBounds = true
         iconImage.anchor(top: topAnchor, left: leftAnchor,  right: nameLabel.leftAnchor, paddingTop: 8, paddingLeft: 16,  paddingRight: 16, width: 25, height: 25)
         nameLabel.anchor(top: topAnchor, left: iconImage.rightAnchor, right: safeAreaLayoutGuide.rightAnchor, paddingTop: 8, paddingLeft: 16)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
