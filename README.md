@@ -12,6 +12,9 @@ IMPLEMENTED:
 - Likes
 - Twitter Splash via RevealingSplashView
 
+<a href="https://imgflip.com/gif/29orc8"><img src="https://i.imgflip.com/29orc8.gif" title="made at imgflip.com"/></a>
+
+
 
 TODO:
 
